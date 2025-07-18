@@ -7,6 +7,9 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Default Chrome location on Render
+const CHROME_PATH = '/opt/render/.cache/puppeteer/chrome/linux-x64/chrome';
+
 export const generatePDF = async (data) => {
   try {
     const html = await ejs.renderFile(
@@ -16,7 +19,9 @@ export const generatePDF = async (data) => {
 
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      // Use this line ONLY if needed!
+      executablePath: CHROME_PATH,
     });
 
     const page = await browser.newPage();
@@ -25,12 +30,7 @@ export const generatePDF = async (data) => {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: {
-        top: '20mm',
-        bottom: '20mm',
-        left: '15mm',
-        right: '15mm'
-      }
+      margin: { top: '20mm', bottom: '20mm', left: '15mm', right: '15mm' }
     });
 
     await browser.close();
@@ -42,10 +42,8 @@ export const generatePDF = async (data) => {
     // Ensure "resumes" directory exists
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
-    // Write file
     fs.writeFileSync(outputPath, pdfBuffer);
 
-    // Return filename
     return filename;
   } catch (err) {
     console.error('❌ Error generating PDF with Puppeteer:', err);

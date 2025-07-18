@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Builder</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #ECEDB0, #f68737c7);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: linear-gradient(to bottom, #f687372e, #ECEDB0);
+      border: 2px solid white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    h1,
+    h2,
+    h4 {
+      color: #585858;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    #education-section {
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 10px;
+      color: white;
+      background-color: #f6873735;
+      margin-bottom: 30px;
+    }
+
+    #education-section input {
+      color: #000;
+    }
+
+    #experience-section {
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 10px;
+      color: white;
+      background-color: #f6873735;
+      margin-bottom: 30px;
+    }
+
+
+    input,
+    textarea {
+      display: block;
+      width: 97%;
+      margin-bottom: 12px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 16px;
+      background-color: #a28223;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px 6px 15px 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+    }
+
+    .section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+
+    #output {
+      white-space: pre-wrap;
+      margin-top: 20px;
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: monospace;
+      border: 1px solid #ccc;
+    }
+
+    .entry {
+      border: 1px solid #e0e0e0;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background-color: #fefefe;
+      position: relative;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .exp-title {
+      margin-top: 40px;
+    }
+
+    .edu-degree {
+      margin-top: 40px;
+    }
+
+    .remove-btn {
+      background-color: #ff4d4d;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+
+    .remove-btn:hover {
+      background-color: #cc0000;
+    }
+
+    .gradient-text {
+      font-size: 48px;
+      font-weight: bold;
+      text-align: center;
+      background: linear-gradient(270deg, #A8A8A8, #DAA520, #A8A8A8, #DAA520);
+      background-size: 500% 500%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 8s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="gradient-text">Resume Builder</h1>
+
+    <input id="name" placeholder="Name" />
+    <input id="headline" placeholder="headline" />
+    <input id="email" placeholder="Email" />
+    <input id="linkedin" placeholder="linkedin" />
+    <input id="phone" placeholder="Phone" />
+    <input id="location" placeholder="Location" />
+    <textarea id="summary" placeholder="Professional Summary"></textarea>
+    <input id="skills" placeholder="Skills (comma-separated)" />
+
+    <!-- Experience Section -->
+    <div class="section">
+      <h2>Experience</h2>
+        <div id="experience-section"></div>
+        <button onclick="addExperience()">+ Add Experience</button>
+    </div>
+
+    <!-- Education Section -->
+    <div class="section">
+      <h2>Education</h2>
+        <div id="education-section"></div>
+        <button onclick="addEducation()">+ Add Education</button>
+    </div>
+
+    <button onclick="generateResume()">Generate Resume</button>
+
+  </div>
+
+  <script>
+    let experienceCount = 0;
+    let educationCount = 0;
+
+    function addExperience() {
+      const id = `exp-${experienceCount++}`;
+      const container = document.createElement('div');
+      container.className = 'entry';
+      container.id = id;
+      container.innerHTML = `
+        <input placeholder="Job Title" class="exp-title" />
+        <input placeholder="Company" class="exp-company" />
+        <input placeholder="Years (e.g. 2020 - 2023)" class="exp-years" />
+        <textarea placeholder="Job Description" class="exp-desc"></textarea>
+        <button class="remove-btn" onclick="removeEntry('${id}')">Remove</button>
+      `;
+      document.getElementById('experience-section').appendChild(container);
+    }
+
+    function addEducation() {
+      const id = `edu-${educationCount++}`;
+      const container = document.createElement('div');
+      container.className = 'entry';
+      container.id = id;
+      container.innerHTML = `
+        <input placeholder="Degree" class="edu-degree" />
+        <input placeholder="CGPA" class="edu-cgpa">
+        <input placeholder="Institution" class="edu-inst" />
+        <input placeholder="Year of Passing" class="edu-year" />
+        <button class="remove-btn" onclick="removeEntry('${id}')">Remove</button>
+      `;
+      document.getElementById('education-section').appendChild(container);
+    }
+
+    function removeEntry(id) {
+      const element = document.getElementById(id);
+      if (element) element.remove();
+    }
+
+    function generateResume() {
+      const experiences = [];
+      document.querySelectorAll('#experience-section .entry').forEach(entry => {
+        const title = entry.querySelector('.exp-title').value;
+        const company = entry.querySelector('.exp-company').value;
+        const years = entry.querySelector('.exp-years').value;
+        const description = entry.querySelector('.exp-desc').value;
+        if (title && company && years && description) {
+          experiences.push({ title, company, years, description });
+        }
+      });
+
+      const education = [];
+      document.querySelectorAll('#education-section .entry').forEach(entry => {
+        const degree = entry.querySelector('.edu-degree').value;
+        const cgpa = entry.querySelector('.edu-cgpa').value;
+        const institution = entry.querySelector('.edu-inst').value;
+        const year = entry.querySelector('.edu-year').value;
+        if (degree && institution && year) {
+          education.push({ degree, cgpa, institution, year });
+        }
+      });
+
+      const data = {
+        name: document.getElementById('name').value,
+        headline: document.getElementById('headline').value,
+        linkedin: document.getElementById('linkedin').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        location: document.getElementById('location').value,
+        summary: document.getElementById('summary').value,
+        skills: document.getElementById('skills').value.split(',').map(s => s.trim()),
+        experience: experiences,
+        education: education
+      };
+
+      fetch('http://localhost:3000/generate-resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(result => {
+          if (result.success && result.downloadLink) {
+            // Automatically trigger download
+            const link = document.createElement('a');
+            link.href = result.downloadLink;
+            link.download = 'resume.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else {
+            alert(result.error || 'Something went wrong!');
+          }
+        }).catch(err => {
+          alert('Error: ' + err.message);
+        });
+    }
+
+    // Initialize with one entry
+    window.onload = () => {
+      addExperience();
+      addEducation();
+    };
+  </script>
+</body>
+
+</html>

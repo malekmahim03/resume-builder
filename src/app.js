@@ -27,7 +27,7 @@ app.post("/generate-resume", async (req, res) => {
 
     const filename = await generatePDF(userData);
 
-    const downloadLink = `http://localhost:${port}/resumes/${filename}`;
+    const downloadLink = `https://resume-builder-jtnd.onrender.com/resumes/${filename}`;
 
     res.json({ success: true, downloadLink });
   } catch (error) {
